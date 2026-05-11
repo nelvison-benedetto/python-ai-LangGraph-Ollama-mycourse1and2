@@ -1,0 +1,71 @@
+# Core
+python-dotenv>=1.1.1  #x env var
+pydantic>=2.12.3      #x validazione e strutturazione dei dati (langchain/langgraph lo usano ovunque)
+typing-extensions>=4.15.0  #usato da langchain (tu non lo useria mai direttamente), estende il system dei types di python
+
+# LangChain ecosystem
+langchain-core>=1.0.0,<2.0.0
+langchain-community>=0.4.0,<1.0.0  #x integrazione tools esterni (loader pdf/web scraping/vector db connectors/ect...)
+langchain-ollama>=1.0.0,<2.0.0  #bridge langchain-ollama, serve x usare i modelli locali
+langgraph>=1.0.0,<2.0.0
+
+# Vector DB
+#qdrant-client>=1.7.0  #perfect x production!! lo puoi self-hostare w docker su server hetzner
+
+#search tools (agents)
+ddgs>=9.0.0   #duckduckgo search, x query web e agenti con accesso a internet
+
+# Database / persistence
+psycopg   #driver postgresql, piu configurabile, perfect x production
+psycopg-binary   #driver postgresql, tutto ready. alternativa a 'psycopg' easy con molte cose gia settate (non consigliato x production)
+langgraph-checkpoint-sqlite  #salva stato agenti in SQLite, x memory tra steps
+langgraph-checkpoint-postgres   #salva stato agenti in postegreSQL, x memory tra steps
+
+# MCP integration
+langchain_mcp_adapters  #mcp=model context protocol, livello avanzato di plugin system x LLM per collegare tool esterni / integrare servizi (api, strumenti)
+
+jupyter ipykernel   #CLASSICO  x avere jupyter notebook
+
+#best packs x RAG pro
+sentence-transformers  # transforma testi in vettori numerici (EMBEDDING!)
+langchain-huggingface  #modo ufficiale LangChain per usare modelli HuggingFace
+langchain-text-splitters   # spezza documenti in chunks(pezzi)
+pypdf   #estre testo da pdf(solo quelli semplici?INFO)
+unstructured  #advanced (x production), x estrarre testo da pdf complessi/word/html/email
+
+
+######################################course 2
+
+# Core dependencies
+python-dotenv
+pydantic
+typing-extensions
+
+# LangChain ecosystem
+langchain
+langchain-community
+langchain-core
+langchain-ollama
+langgraph
+langgraph-checkpoint-sqlite
+langgraph-checkpoint-postgres
+langchain_mcp_adapters
+
+# Document processing
+docling[vlm]
+
+# Vector stores
+langchain-chroma
+
+# API clients
+tavily-python
+
+# Web searching
+ddgs
+
+# Database
+psycopg
+psycopg-binary
+
+# Utilities
+rank_bm25
