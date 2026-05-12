@@ -10,17 +10,17 @@ from rank_bm25 import BM25Plus
 # =============================================================================
 # Configuration
 # =============================================================================
-
 # ChromaDB Configuration (from PageRAG - Data Ingestion)
 CHROMA_DIR = "chroma_financial_db"
 COLLECTION_NAME = "financial_docs"
 EMBEDDING_MODEL = "nomic-embed-text"
 BASE_URL = "http://localhost:11434"
-
 LLM_MODEL = "qwen3"
-
 # ollama pull nomic-embed_text
-embeddings= OllamaEmbeddings(model=EMBEDDING_MODEL, base_url=BASE_URL, num_ctx=8192)
+embeddings= OllamaEmbeddings(
+    model=EMBEDDING_MODEL, 
+    base_url=BASE_URL, 
+    num_ctx=8192)
 
 vector_store = Chroma(
     collection_name=COLLECTION_NAME,
@@ -28,14 +28,13 @@ vector_store = Chroma(
     persist_directory=CHROMA_DIR
 )
 
-llm = ChatOllama(model=LLM_MODEL, base_url=BASE_URL)
+llm = ChatOllama(
+    model=LLM_MODEL, 
+    base_url=BASE_URL)
 
-# ### Extract Filters and Ranking Keywords
-
+#### Extract Filters and Ranking Keywords
 def extract_filters(user_query:str):
-
     llm_structured = llm.with_structured_output(ChunkMetadata)
-
     prompt = f"""Extract metadata filters from the query. Return None for fields not mentioned.
         USER QUERY: {user_query}
         COMPANY MAPPINGS:
@@ -61,9 +60,7 @@ def extract_filters(user_query:str):
     return filters
 
 # ### Generate Ranking Keywords
-
 def generate_ranking_keywords(user_query: str):
-    # ALT + Z
     prompt = f"""Generate EXACTLY 5 financial keywords from SEC filings terminology.
         USER QUERY: {user_query}
         USE EXACT TERMS FROM 10-K/10-Q FILINGS:
@@ -90,8 +87,7 @@ def generate_ranking_keywords(user_query: str):
     result = llm_structured.invoke(prompt)
     return result.keywords
 
-# ### Search the Doc from Vector DB
-
+#### Search the Doc from Vector DB
 def build_search_kwargs(filters, ranking_keywords, k=3):
     search_kwargs = {"k": k, 'fetch_k': k*20}
     if filters:
@@ -137,10 +133,7 @@ def search_docs(query, filters={}, ranking_keywords=[], k=3):
     )
     return retriever.invoke(query)
 
-
-
-# ### Extract Documents Headings and Sub-Headings for ReRanking
-
+#### Extract Documents Headings and Sub-Headings for ReRanking
 def extract_headings_with_content(text):
     """
     Extract markdown headings with one paragraph of content after them.
